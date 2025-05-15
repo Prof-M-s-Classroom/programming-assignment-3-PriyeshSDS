@@ -39,11 +39,12 @@ public:
         // Set up the heap: everyone starts with infinite key, no parent
         for (int v = 0; v < numVertices; ++v) {
             parent[v] = -1;
-            minHeap.insert(v, INT_MAX);
+            if (v == 0)
+                minHeap.insert(v, 0);        // start node gets key 0
+            else
+                minHeap.insert(v, INT_MAX);  // others get infinity
         }
 
-        // Force vertex 0 to go first by setting its key to 0
-        minHeap.decreaseKey(0, 0);
 
         // Keep grabbing the cheapest available node
         while (!minHeap.isEmpty()) {

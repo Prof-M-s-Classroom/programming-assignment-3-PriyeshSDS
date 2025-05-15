@@ -21,10 +21,10 @@ public:
     }
 
     void insert(int vertex, int key) {
-        heapArray[size] = vertex;
         keyArray[vertex] = key;
-        position[vertex] = size;
         int i = size;
+        heapArray[i] = vertex;
+        position[vertex] = i;
         size++;
 
         while (i != 0 && keyArray[heapArray[i]] < keyArray[heapArray[(i - 1) / 2]]) {
@@ -36,10 +36,11 @@ public:
     }
 
     void decreaseKey(int vertex, int newKey) {
-        keyArray[vertex] = newKey;
         int i = position[vertex];
+        keyArray[vertex] = newKey;
 
-        while (i != 0 && keyArray[vertex] < keyArray[heapArray[(i - 1) / 2]]) {
+        // Bubble up this vertex by comparing its new key directly
+        while (i != 0 && newKey < keyArray[heapArray[(i - 1) / 2]]) {
             heapArray[i] = heapArray[(i - 1) / 2];
             position[heapArray[i]] = i;
             i = (i - 1) / 2;
