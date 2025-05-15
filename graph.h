@@ -33,54 +33,46 @@ public:
     }
 
     void primMST() {
-        int* parent = new int[numVertices];   // parent[i] = the vertex that connects i to the MST
-        int* key = new int[numVertices];      // key[i] = weight of the cheapest edge to i
-        MinHeap minHeap(numVertices);         // custom min heap to track the lowest-key vertex
+        int* parent = new int[numVertices];
+        MinHeap minHeap(numVertices);
 
-        // Initialize keys to INT_MAX and parents to -1
+        // Set up the heap: everyone starts with infinite key, no parent
         for (int v = 0; v < numVertices; ++v) {
-            key[v] = INT_MAX;
             parent[v] = -1;
+            minHeap.insert(v, INT_MAX);
         }
 
-        // Start from vertex 0
-        key[0] = 0;
+        // Force vertex 0 to go first by setting its key to 0
+        minHeap.decreaseKey(0, 0);
 
-        // Insert all vertices with their current key values
-        for (int v = 0; v < numVertices; ++v) {
-            minHeap.insert(v, key[v]);
-        }
-
-        // Build the MST
+        // Keep grabbing the cheapest available node
         while (!minHeap.isEmpty()) {
-            int u = minHeap.extractMin();  // Get the vertex with the lowest key
+            int u = minHeap.extractMin();
 
-            // Check all neighbors of u
+            // Check all its neighbors
             for (int v = 0; v < numVertices; ++v) {
                 int weight = adjMatrix[u][v];
 
-                // If there's an edge, v is still in heap, and this edge is better than what we had
-                if (weight != INT_MAX && minHeap.isInMinHeap(v) && weight < key[v]) {
-                    key[v] = weight;
+                // If there's a better edge to a node still in the heap, use it
+                if (weight != INT_MAX && minHeap.isInMinHeap(v) && weight < minHeap.getKey(v)) {
                     parent[v] = u;
-                    minHeap.decreaseKey(v, key[v]);
+                    minHeap.decreaseKey(v, weight);
                 }
             }
         }
 
-        // Print the MST and compute total cost
+        // Print the MST edges and total weight
         int totalCost = 0;
         for (int i = 1; i < numVertices; ++i) {
             if (parent[i] != -1) {
-                std::cout << parent[i] << " -- " << i << " (" << key[i] << ")\n";
-                totalCost += key[i];
+                int weight = adjMatrix[i][parent[i]];
+                std::cout << parent[i] << " -- " << i << " (" << weight << ")\n";
+                totalCost += weight;
             }
         }
 
         std::cout << "Total Cost: " << totalCost << std::endl;
-
         delete[] parent;
-        delete[] key;
     }
 
 private:

@@ -39,12 +39,14 @@ public:
         keyArray[vertex] = newKey;
         int i = position[vertex];
 
-        while (i != 0 && keyArray[heapArray[i]] < keyArray[heapArray[(i - 1) / 2]]) {
-            std::swap(heapArray[i], heapArray[(i - 1) / 2]);
+        while (i != 0 && keyArray[vertex] < keyArray[heapArray[(i - 1) / 2]]) {
+            heapArray[i] = heapArray[(i - 1) / 2];
             position[heapArray[i]] = i;
-            position[heapArray[(i - 1) / 2]] = (i - 1) / 2;
             i = (i - 1) / 2;
         }
+
+        heapArray[i] = vertex;
+        position[vertex] = i;
     }
 
     int extractMin() {
@@ -83,6 +85,10 @@ public:
     bool isEmpty() {
         return size == 0;
     }
+    int getKey(int vertex) {
+        return keyArray[vertex];
+    }
+
 
 private:
     int* heapArray;
