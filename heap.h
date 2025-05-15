@@ -54,12 +54,17 @@ public:
         if (size == 0) return -1;
 
         int root = heapArray[0];
+
+        // ✅ Mark root as removed so isInMinHeap works
+        position[root] = -1;
+
         heapArray[0] = heapArray[size - 1];
         position[heapArray[0]] = 0;
         size--;
         minHeapify(0);
         return root;
     }
+
 
     void minHeapify(int i) {
         int smallest = i;
@@ -80,8 +85,9 @@ public:
     }
 
     bool isInMinHeap(int vertex) {
-        return position[vertex] < size;
+        return position[vertex] < size && position[vertex] >= 0;
     }
+
 
     bool isEmpty() {
         return size == 0;
