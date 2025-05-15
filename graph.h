@@ -18,6 +18,10 @@ public:
     };
     ~Graph();
     void addEdge(int u, int v, int weight){
+        if (u >= 0 && v >= 0 && u < numVertices && v < numVertices) {
+            adjMatrix[u][v] = weight;
+            adjMatrix[v][u] = weight;
+        }
     }
     void primMST();  // Must print MST edges and total weight
 
