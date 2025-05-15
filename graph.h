@@ -29,7 +29,10 @@ public:
             adjMatrix[v][u] = weight;
         }
     }
-    void primMST();  // Must print MST edges and total weight
+    void primMST() {
+
+        // Must print MST edges and total weight
+    }
 
 private:
     int** adjMatrix;
